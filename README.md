@@ -1,4 +1,4 @@
-# test
+# Vue Tensorflow App
 
 ## Project setup
 ```
