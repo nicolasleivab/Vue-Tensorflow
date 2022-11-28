@@ -3,7 +3,20 @@
 </template>
 
 <script lang="ts">
-export default {};
+import { defineComponent, PropType } from "vue";
+type TFlexDirection = "row" | "column";
+
+export default defineComponent({
+  props: {
+    flexDirection: String as PropType<TFlexDirection>,
+  },
+
+  setup(props) {
+    return {
+      urlStr: props.flexDirection,
+    };
+  },
+});
 </script>
 
 <style>

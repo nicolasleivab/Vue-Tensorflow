@@ -1,19 +1,20 @@
 <template>
-  <img ref="imgRef" src="{urlStr}" width="400" crossorigin="anonymous" />
-  <p>{urlStr}</p>
+  <img ref="imgRef" :src="urlStr" width="400" crossorigin="anonymous" />
 </template>
+
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   props: {
     url: String,
   },
-
   setup(props) {
     return {
       urlStr: props.url,
     };
   },
-};
+});
 </script>
 
 <style>
