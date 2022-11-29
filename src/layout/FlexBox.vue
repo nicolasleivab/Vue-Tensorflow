@@ -22,6 +22,7 @@ export default defineComponent({
 <style>
 .flexBox {
   display: flex;
+  flex-direction: v-bind(flexDirection);
   justify-content: center;
   align-items: center;
   width: 100%;
