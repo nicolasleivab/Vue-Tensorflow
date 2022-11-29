@@ -1,4 +1,6 @@
-# Vue Tensorflow App
+# Vue Object Detection App
+
+Object Detection app built with typescript, vue and tensorflow. Live demo available [here](https://vue-object-detection.netlify.app/).
 
 ## Project setup
 
