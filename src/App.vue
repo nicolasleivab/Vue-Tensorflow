@@ -1,29 +1,44 @@
 <template>
-  <FlexBox flexDirection="column">
-    <FlexItem><HeaderTitle>Vue Detect Object App</HeaderTitle></FlexItem>
-    <FlexItem v-if="!isStreaming">
-      <StyledButton btnType="primary" @click="startVideo"
-        >Start Video</StyledButton
-      >
-    </FlexItem>
-    <FlexItem v-else>
-      <StyledButton btnType="secondary" @click="stopVideo"
-        >Stop Video</StyledButton
-      >
-    </FlexItem>
+  <FlexBox flex-direction="column">
+    <FlexItem><HeaderTitle>Vue Object Detection App</HeaderTitle></FlexItem>
     <FlexItem>
       <CardFrame>
-        <FlexBox flexDirection="column">
+        <FlexBox flex-direction="column">
           <FlexItem>
             <video ref="videoRef" width="400" autoplay="true" />
           </FlexItem>
+          <FlexBox flex-direction="row">
+            <FlexItem v-if="!isStreaming">
+              <StyledButton btn-type="primary" @click="startVideo"
+                >Start Video</StyledButton
+              >
+            </FlexItem>
+            <FlexItem v-else>
+              <StyledButton btn-type="secondary" @click="stopVideo"
+                >Stop Video</StyledButton
+              >
+            </FlexItem>
           <FlexItem>
-            <SvgButton v-if="isStreaming" @click="takeScreenShot" />
+            <SvgButton @click="takeScreenShot"/>
           </FlexItem>
+        </FlexBox>
         </FlexBox>
       </CardFrame>
     </FlexItem>
-    <FlexItem v-if="isStreaming">
+    <FlexItem>
+      <StyledButton btn-type="primary" @click="detectObject"
+        >Detect Object</StyledButton
+      >
+    </FlexItem>
+    <FlexItem v-if="isLoading">
+      <ResultsDisplay>Image classification in process...</ResultsDisplay>
+      </FlexItem>
+    <FlexItem v-if="prediction.length > 0 && !isLoading">
+      <ResultsDisplay>{{
+        `Object detected: ${prediction[0].class}`
+      }}</ResultsDisplay>
+    </FlexItem>
+    <FlexItem>
       <CardFrame>
         <img
           alt="snapshot goes here"
@@ -34,6 +49,7 @@
         />
       </CardFrame>
     </FlexItem>
+    <FooterText />
   </FlexBox>
 </template>
 
@@ -44,10 +60,13 @@ import CardFrame from "./layout/CardFrame.vue";
 import StyledButton from "./components/StyledButton.vue";
 import SvgButton from "./components/SvgButton.vue";
 import HeaderTitle from "./components/HeaderTitle.vue";
+import ResultsDisplay from "./components/ResultsDisplay.vue";
+import FooterText from "./components/FooterText.vue";
 import {
   startVideoHandler,
   stopVideoHandler,
   takeScreenShotHandler,
+  detectObjectHandler,
 } from "./handlers";
 import { ref } from "vue";
 
@@ -59,15 +78,19 @@ export default {
     CardFrame,
     StyledButton,
     SvgButton,
+    ResultsDisplay,
+    FooterText
   },
 
   setup() {
     const videoRef = ref<any>("");
     const imgRef = ref<any>("");
     const isStreaming = ref<boolean>(false);
+    const prediction = ref<{ class: string }[]>([]);
+    const isLoading = ref<boolean>(false);
 
     async function startVideo() {
-      startVideoHandler(isStreaming, videoRef);
+     await startVideoHandler(isStreaming, videoRef);
     }
 
     function stopVideo() {
@@ -75,16 +98,32 @@ export default {
     }
 
     function takeScreenShot() {
+      if(!isStreaming.value){
+        return alert("Please start the video first.")
+      }
       takeScreenShotHandler(imgRef, videoRef);
+    }
+
+    async function detectObject() {
+      if (!imgRef.value.src) {
+  
+        return alert("Please take a snapshot first.");
+      }
+      isLoading.value = true;
+      await detectObjectHandler(imgRef, prediction);
+      isLoading.value = false;
     }
 
     return {
       startVideo,
       stopVideo,
       takeScreenShot,
+      detectObject,
       videoRef,
       imgRef,
       isStreaming,
+      prediction,
+      isLoading
     };
   },
 };

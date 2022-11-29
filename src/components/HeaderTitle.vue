@@ -12,6 +12,6 @@ export default defineComponent({});
 
 <style>
 .headerTitle {
-  font-size: 17px;
+  font-size: 16px;
 }
 </style>
