@@ -1,18 +1,37 @@
 <template>
   <FlexBox flexDirection="column">
-    <FlexItem>
-      <ButtonComp v-if="!isStreaming" @click="startVideo">Start Video</ButtonComp>
-      <ButtonComp v-else @click="stopVideo">Stop Video</ButtonComp>
+    <FlexItem><HeaderTitle>Vue Detect Object App</HeaderTitle></FlexItem>
+    <FlexItem v-if="!isStreaming">
+      <StyledButton btnType="primary" @click="startVideo"
+        >Start Video</StyledButton
+      >
+    </FlexItem>
+    <FlexItem v-else>
+      <StyledButton btnType="secondary" @click="stopVideo"
+        >Stop Video</StyledButton
+      >
     </FlexItem>
     <FlexItem>
       <CardFrame>
-        <ImgContainer
-          url="https://images.unsplash.com/photo-1567581935884-3349723552ca" />
+        <FlexBox flexDirection="column">
+          <FlexItem>
+            <video ref="videoRef" width="400" autoplay="true" />
+          </FlexItem>
+          <FlexItem>
+            <SvgButton v-if="isStreaming" @click="takeScreenShot" />
+          </FlexItem>
+        </FlexBox>
       </CardFrame>
     </FlexItem>
-    <FlexItem>
+    <FlexItem v-if="isStreaming">
       <CardFrame>
-          <video ref="videoRef" width="400" autoplay="true" />
+        <img
+          alt="snapshot goes here"
+          ref="imgRef"
+          width="400"
+          height="300"
+          crossorigin="anonymous"
+        />
       </CardFrame>
     </FlexItem>
   </FlexBox>
@@ -22,38 +41,64 @@
 import FlexBox from "./layout/FlexBox.vue";
 import FlexItem from "./layout/FlexItem.vue";
 import CardFrame from "./layout/CardFrame.vue";
-import ImgContainer from "./components/ImgContainer.vue";
-import ButtonComp from "./components/ButtonComp.vue";
-import startVideoHandler from './handlers/start-video';
+import StyledButton from "./components/StyledButton.vue";
+import SvgButton from "./components/SvgButton.vue";
+import HeaderTitle from "./components/HeaderTitle.vue";
+import {
+  startVideoHandler,
+  stopVideoHandler,
+  takeScreenShotHandler,
+} from "./handlers";
 import { ref } from "vue";
 
 export default {
-  components: { FlexBox, FlexItem, ImgContainer, CardFrame, ButtonComp },
+  components: {
+    HeaderTitle,
+    FlexBox,
+    FlexItem,
+    CardFrame,
+    StyledButton,
+    SvgButton,
+  },
 
   setup() {
     const videoRef = ref<any>("");
+    const imgRef = ref<any>("");
     const isStreaming = ref<boolean>(false);
 
-    async function startVideo(){
+    async function startVideo() {
       startVideoHandler(isStreaming, videoRef);
     }
 
     function stopVideo() {
-      console.log(videoRef)
-      const stream = videoRef.value.srcObject;
-      const tracks = stream.getTracks();
-      tracks.map((track: any) => track.stop());
-      isStreaming.value = false;
+      stopVideoHandler(isStreaming, videoRef);
+    }
+
+    function takeScreenShot() {
+      takeScreenShotHandler(imgRef, videoRef);
     }
 
     return {
       startVideo,
       stopVideo,
+      takeScreenShot,
       videoRef,
+      imgRef,
       isStreaming,
     };
   },
 };
 </script>
 
-<style></style>
+<style>
+@font-face {
+  font-family: "Roboto Mono";
+  src: local("Roboto Mono"),
+    url(./fonts/RobotoMono-VariableFont_wght.ttf) format("truetype");
+}
+body,
+button {
+  font-family: "Roboto Mono", Helvetica, Arial;
+  font-size: 15px;
+}
+</style>

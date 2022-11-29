@@ -1,5 +1,5 @@
 <template>
-  <div className="cardFrame"><slot></slot></div>
+  <div class="cardFrame"><slot></slot></div>
 </template>
 
 <script lang="ts">

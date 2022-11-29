@@ -1,5 +1,5 @@
 <template>
-  <div className="flexItem"><slot></slot></div>
+  <div class="flexItem"><slot></slot></div>
 </template>
 
 <script lang="ts">

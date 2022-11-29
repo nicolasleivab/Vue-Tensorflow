@@ -1,5 +1,5 @@
 <template>
-  <div className="flexBox"><slot></slot></div>
+  <div class="flexBox"><slot></slot></div>
 </template>
 
 <script lang="ts">
