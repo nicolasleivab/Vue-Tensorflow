@@ -18,10 +18,4 @@ export default defineComponent({
 </script>
 
 <style>
-.imgContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
 </style>

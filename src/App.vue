@@ -1,15 +1,21 @@
 <template>
   <FlexBox flexDirection="column">
     <FlexItem>
-      <ButtonComp @click="myMethod">Start Video</ButtonComp>
+      <ButtonComp v-if="!isStreaming" @click="startVideo">Start Video</ButtonComp>
+      <ButtonComp v-else @click="stopVideo">Stop Video</ButtonComp>
     </FlexItem>
     <FlexItem>
       <CardFrame>
         <ImgContainer
           url="https://images.unsplash.com/photo-1567581935884-3349723552ca" />
       </CardFrame>
-    </FlexItem
-  ></FlexBox>
+    </FlexItem>
+    <FlexItem>
+      <CardFrame>
+          <video ref="videoRef" width="400" autoplay="true" />
+      </CardFrame>
+    </FlexItem>
+  </FlexBox>
 </template>
 
 <script lang="ts">
@@ -18,17 +24,33 @@ import FlexItem from "./layout/FlexItem.vue";
 import CardFrame from "./layout/CardFrame.vue";
 import ImgContainer from "./components/ImgContainer.vue";
 import ButtonComp from "./components/ButtonComp.vue";
+import startVideoHandler from './handlers/start-video';
+import { ref } from "vue";
 
 export default {
   components: { FlexBox, FlexItem, ImgContainer, CardFrame, ButtonComp },
 
   setup() {
-    function alertUser() {
-      alert("This is an alert");
+    const videoRef = ref<any>("");
+    const isStreaming = ref<boolean>(false);
+
+    async function startVideo(){
+      startVideoHandler(isStreaming, videoRef);
+    }
+
+    function stopVideo() {
+      console.log(videoRef)
+      const stream = videoRef.value.srcObject;
+      const tracks = stream.getTracks();
+      tracks.map((track: any) => track.stop());
+      isStreaming.value = false;
     }
 
     return {
-      myMethod: alertUser,
+      startVideo,
+      stopVideo,
+      videoRef,
+      isStreaming,
     };
   },
 };
