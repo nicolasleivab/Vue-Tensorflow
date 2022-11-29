@@ -1,6 +1,6 @@
 # Vue Object Detection App
 
-Object Detection app built with typescript, vue and tensorflow. Live demo available [here](https://vue-object-detection.netlify.app/). The object detection model supports up to (90 object classes)[https://github.com/tensorflow/tfjs-models/blob/master/coco-ssd/src/classes.ts].
+Object Detection app built with typescript, vue and tensorflow. Live demo available [here](https://vue-object-detection.netlify.app/). The object detection model supports up to [90 object classes](https://github.com/tensorflow/tfjs-models/blob/master/coco-ssd/src/classes.ts).
 
 ## Project setup
 
