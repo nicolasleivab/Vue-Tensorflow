@@ -2,7 +2,7 @@ import { Ref } from "vue";
 
 export default async function startVideoHandler(
   isStreaming: Ref<boolean>,
-  videoRef: Ref<any>
+  videoRef: Ref<HTMLVideoElement | null>
 ) {
   if (navigator.mediaDevices.getUserMedia) {
     const devices = await navigator.mediaDevices.enumerateDevices();

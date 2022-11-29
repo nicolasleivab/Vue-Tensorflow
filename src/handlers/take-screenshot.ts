@@ -4,8 +4,8 @@ const VIDEO_WIDTH = 300;
 const VIDEO_HEIGHT = 150;
 
 export default function takeScreenShotHandler(
-  imgRef: Ref<any>,
-  videoRef: Ref<any>
+  imgRef: Ref<HTMLVideoElement | any>,
+  videoRef: Ref<HTMLVideoElement | any>
 ) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");

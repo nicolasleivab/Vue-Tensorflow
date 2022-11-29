@@ -6,7 +6,7 @@ require("@tensorflow/tfjs-backend-webgl");
 const cocoSsd = require("@tensorflow-models/coco-ssd");
 
 export default async function detectObjectHandler(
-  imgRef: Ref<any>,
+  imgRef: Ref<HTMLImageElement | null>,
   prediction: Ref<{ class: string }[]>
 ) {
   const img = imgRef.value;

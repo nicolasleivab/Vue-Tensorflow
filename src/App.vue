@@ -83,8 +83,8 @@ export default {
   },
 
   setup() {
-    const videoRef = ref<any>("");
-    const imgRef = ref<any>("");
+    const videoRef = ref<HTMLVideoElement | null>(null);
+    const imgRef = ref<HTMLImageElement  | null>(null);
     const isStreaming = ref<boolean>(false);
     const prediction = ref<{ class: string }[]>([]);
     const isLoading = ref<boolean>(false);
@@ -105,7 +105,7 @@ export default {
     }
 
     async function detectObject() {
-      if (!imgRef.value.src) {
+      if (imgRef.value && !imgRef.value.src) {
   
         return alert("Please take a snapshot first.");
       }

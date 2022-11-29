@@ -3,7 +3,7 @@ import { Ref } from "vue";
 
 export default function stopVideoHandler(
   isStreaming: Ref<boolean>,
-  videoRef: Ref<any>
+  videoRef: Ref<HTMLVideoElement | any>
 ) {
   const stream = videoRef.value.srcObject;
   const tracks = stream.getTracks();
