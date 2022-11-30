@@ -5,7 +5,7 @@
       <CardFrame>
         <FlexBox flex-direction="column">
           <FlexItem>
-            <video ref="videoRef" width="400" autoplay="true" />
+            <video ref="videoRef" autoplay="true" />
           </FlexItem>
           <FlexBox flex-direction="row">
             <FlexItem v-if="!isStreaming">
@@ -18,10 +18,10 @@
                 >Stop Video</StyledButton
               >
             </FlexItem>
-          <FlexItem>
-            <SvgButton @click="takeScreenShot"/>
-          </FlexItem>
-        </FlexBox>
+            <FlexItem>
+              <SvgButton @click="takeScreenShot" />
+            </FlexItem>
+          </FlexBox>
         </FlexBox>
       </CardFrame>
     </FlexItem>
@@ -32,7 +32,7 @@
     </FlexItem>
     <FlexItem v-if="isLoading">
       <ResultsDisplay>Image classification in process...</ResultsDisplay>
-      </FlexItem>
+    </FlexItem>
     <FlexItem v-if="prediction.length > 0 && !isLoading">
       <ResultsDisplay>{{
         `Object detected: ${prediction[0].class}`
@@ -40,13 +40,7 @@
     </FlexItem>
     <FlexItem>
       <CardFrame>
-        <img
-          alt="snapshot goes here"
-          ref="imgRef"
-          width="400"
-          height="300"
-          crossorigin="anonymous"
-        />
+        <img alt="snapshot goes here" ref="imgRef" crossorigin="anonymous" />
       </CardFrame>
     </FlexItem>
     <FooterText />
@@ -79,18 +73,18 @@ export default {
     StyledButton,
     SvgButton,
     ResultsDisplay,
-    FooterText
+    FooterText,
   },
 
   setup() {
     const videoRef = ref<HTMLVideoElement | null>(null);
-    const imgRef = ref<HTMLImageElement  | null>(null);
+    const imgRef = ref<HTMLImageElement | null>(null);
     const isStreaming = ref<boolean>(false);
     const prediction = ref<{ class: string }[]>([]);
     const isLoading = ref<boolean>(false);
 
     async function startVideo() {
-     await startVideoHandler(isStreaming, videoRef);
+      await startVideoHandler(isStreaming, videoRef);
     }
 
     function stopVideo() {
@@ -98,15 +92,14 @@ export default {
     }
 
     function takeScreenShot() {
-      if(!isStreaming.value){
-        return alert("Please start the video first.")
+      if (!isStreaming.value) {
+        return alert("Please start the video first.");
       }
       takeScreenShotHandler(imgRef, videoRef);
     }
 
     async function detectObject() {
       if (imgRef.value && !imgRef.value.src) {
-  
         return alert("Please take a snapshot first.");
       }
       isLoading.value = true;
@@ -123,7 +116,7 @@ export default {
       imgRef,
       isStreaming,
       prediction,
-      isLoading
+      isLoading,
     };
   },
 };
@@ -139,5 +132,18 @@ body,
 button {
   font-family: "Roboto Mono", Helvetica, Arial;
   font-size: 15px;
+}
+
+img,
+video {
+  width: 400px;
+  height: 300px;
+}
+@media (max-width: 576px) {
+  img,
+  video {
+    width: 95%;
+    height: 200px;
+  }
 }
 </style>

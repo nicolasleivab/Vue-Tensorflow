@@ -1,10 +1,11 @@
-import { mount } from '@vue/test-utils';
-import HeaderTitle from '../HeaderTitle.vue';
+import { mount } from "@vue/test-utils";
+import HeaderTitle from "../HeaderTitle.vue";
 
-const MSG = 'new message'
+const MSG = "new message";
 const Header = {
-  template: `<${HeaderTitle}>${MSG}<${HeaderTitle}/>`
-}
+  template: `<HeaderTitle>${MSG}<HeaderTitle/>`,
+  components: { HeaderTitle },
+};
 
 describe("HeaderTitle.vue", () => {
   it("renders children nodes when passed", () => {

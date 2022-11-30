@@ -1,10 +1,11 @@
-import { mount } from '@vue/test-utils';
-import ResultsDisplay from '../ResultsDisplay.vue';
+import { mount } from "@vue/test-utils";
+import ResultsDisplay from "../ResultsDisplay.vue";
 
-const MSG = 'person'
+const MSG = "person";
 const Results = {
-  template: `<${ResultsDisplay}>${MSG}<${ResultsDisplay}/>`
-}
+  template: `<ResultsDisplay>${MSG}<ResultsDisplay/>`,
+  components: { ResultsDisplay },
+};
 
 describe("ResultsDisplay.vue", () => {
   it("renders results when passed as children", () => {

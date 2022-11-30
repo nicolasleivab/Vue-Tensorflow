@@ -13,5 +13,4 @@ export default async function detectObjectHandler(
   const model = await cocoSsd.load();
   const predictions = await model.detect(img);
   prediction.value = predictions;
-
 }
