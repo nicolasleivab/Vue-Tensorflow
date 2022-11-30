@@ -25,14 +25,14 @@ export default defineComponent({
 .errorAlert {
   font-size: 14px;
   padding: 5px;
-  background-color: red;
+  background-color: #FF6347;
   border-radius: 5px;
 }
 
 .warningAlert {
   font-size: 14px;
   padding: 5px;
-  background-color: yellow;
+  background-color: #FDDA0D;
   border-radius: 5px;
 }
 </style>
