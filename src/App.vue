@@ -1,6 +1,11 @@
 <template>
   <FlexBox flex-direction="column">
     <FlexItem><HeaderTitle>Vue Object Detection App</HeaderTitle></FlexItem>
+    <FlexItem v-if="alertValue.msg !== ''"
+      ><AlertTxt :alert-type="alertValue.type">{{
+        alertValue.msg
+      }}</AlertTxt></FlexItem
+    >
     <FlexItem>
       <CardFrame>
         <FlexBox flex-direction="column">
@@ -55,6 +60,7 @@ import StyledButton from "./components/StyledButton.vue";
 import SvgButton from "./components/SvgButton.vue";
 import HeaderTitle from "./components/HeaderTitle.vue";
 import ResultsDisplay from "./components/ResultsDisplay.vue";
+import AlertTxt from "./components/AlertTxt.vue";
 import FooterText from "./components/FooterText.vue";
 import {
   startVideoHandler,
@@ -63,6 +69,7 @@ import {
   detectObjectHandler,
 } from "./handlers";
 import { ref } from "vue";
+import { TAlertValue } from "./types";
 
 export default {
   components: {
@@ -74,6 +81,7 @@ export default {
     SvgButton,
     ResultsDisplay,
     FooterText,
+    AlertTxt,
   },
 
   setup() {
@@ -82,9 +90,20 @@ export default {
     const isStreaming = ref<boolean>(false);
     const prediction = ref<{ class: string }[]>([]);
     const isLoading = ref<boolean>(false);
+    const alertValue = ref<TAlertValue>({ type: "warning", msg: "" });
+    const alertTimeout = ref<ReturnType<typeof setTimeout> | null>(null);
+
+    function clearAlert() {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      clearTimeout(alertTimeout.value!);
+      alertTimeout.value = setTimeout(
+        () => (alertValue.value = { type: "warning", msg: "" }),
+        3000
+      );
+    }
 
     async function startVideo() {
-      await startVideoHandler(isStreaming, videoRef);
+      await startVideoHandler(isStreaming, videoRef, alertValue);
     }
 
     function stopVideo() {
@@ -93,17 +112,25 @@ export default {
 
     function takeScreenShot() {
       if (!isStreaming.value) {
-        return alert("Please start the video first.");
+        alertValue.value = {
+          type: "warning",
+          msg: "Please start the video first.",
+        };
+        return clearAlert();
       }
       takeScreenShotHandler(imgRef, videoRef);
     }
 
     async function detectObject() {
       if (imgRef.value && !imgRef.value.src) {
-        return alert("Please take a snapshot first.");
+        alertValue.value = {
+          type: "warning",
+          msg: "Please take a snapshot first.",
+        };
+        return clearAlert();
       }
       isLoading.value = true;
-      await detectObjectHandler(imgRef, prediction);
+      await detectObjectHandler(imgRef, prediction, alertValue);
       isLoading.value = false;
     }
 
@@ -117,6 +144,7 @@ export default {
       isStreaming,
       prediction,
       isLoading,
+      alertValue,
     };
   },
 };
@@ -142,7 +170,7 @@ video {
 @media (max-width: 576px) {
   img,
   video {
-    width: 95%;
+    max-width: 95%;
     height: 200px;
   }
 }
